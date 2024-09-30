@@ -1,0 +1,140 @@
+<!-- Products -->
+<!-- Parts of this file were adapted from the example html provided in the project step 3 instructions -->
+
+<!-- Import jQuery library -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script language="JavaScript">
+
+
+    // Function to show or hide different sections of the page based on the action
+    function showform(dowhat) {
+        /*
+        * four DIVS: browse, insert, update
+        * this function sets one visible the others not
+        */
+        if (dowhat == 'insert'){
+            document.getElementById('browse').style.display = 'none';
+            document.getElementById('insert').style.display = 'block';
+            document.getElementById('update').style.display = 'none';
+        }
+        else if (dowhat == 'update'){
+            document.getElementById('browse').style.display = 'none';
+            document.getElementById('insert').style.display = 'none';
+            document.getElementById('update').style.display = 'block';
+        }
+        else if (dowhat == 'delete'){
+            document.getElementById('browse').style.display = 'none';
+            document.getElementById('insert').style.display = 'none';
+            document.getElementById('update').style.display = 'none';
+        }
+        else if (dowhat == 'all'){
+            document.getElementById('browse').style.display = 'block';
+            document.getElementById('insert').style.display = 'block';
+            document.getElementById('update').style.display = 'block';
+        }
+        else { //by default display browse
+            document.getElementById('browse').style.display = 'block';
+            document.getElementById('insert').style.display = 'none';
+            document.getElementById('update').style.display = 'none';
+        }
+    }
+    // Function to show the insert form
+    function newProduct() { showform('insert'); }
+
+    // Function to show the update form and populate it with product data
+    function updateProduct(productID) 
+    { 
+        showform('update'); 
+
+        var row = document.getElementById('row_' + productID);
+
+        // Update the form fields with the values from the table row
+       // Update the form fields with the values from the table row
+        document.getElementById('input-update-productID').value = row.cells[1].innerText.trim();
+        document.getElementById('input-update-productName').value = row.cells[2].innerText.trim();
+        document.getElementById('input-update-description').value = row.cells[3].innerText.trim();
+        document.getElementById('input-update-price').value = row.cells[4].innerText.trim();
+        document.getElementById('input-update-inventory').value = row.cells[5].innerText.trim();
+    }
+    // Function to show the browse section
+    function browseProducts() { showform ('browse'); }
+
+    // Function to show all sections
+    function showAll() { showform ('all'); }
+</script>
+
+<body onload="browseProducts()">
+    <h2>Products</h2>
+    <h3>The products entity stores detailed information about the bakery’s products in order to track inventory and sales.</h3>
+
+    <!-- Browse section to display the products table -->
+    <div id = "browse">
+        <table border="1" cellpadding="5">
+            <tr>
+                <th><a href="#" onClick="newProduct()">New</a></th>
+                <th>ID</th>
+                <th>Product Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Inventory</th>
+            </tr>
+
+            {{#each data}}
+                <tr id="row_{{this.productID}}">
+                    <td><a href="#" onClick="updateProduct({{this.productID}})">Edit</a></td>
+                    <td align="right" >{{this.productID}}</td>
+                    <td>{{this.productName}}</td>
+                    <td align="right" >{{this.description}}</td>
+                    <td>{{this.price}}</td>
+                    <td>{{this.inventory}}</td>
+                    <td><a href="#" onClick="deleteProduct({{this.productID}})">Delete</a></td>
+                </tr>
+            {{/each}}
+        </table>
+    </div> <!-- browse -->
+
+    <!-- Insert section to add a new product -->
+    <div id="insert">
+        <form method="POST" id="addProduct" action="/add-product-form">
+            <legend><strong>Add Product</strong></legend>
+            <fieldset class="fields">
+                <label for="input-productName">*Product Name: </label>
+                <input type="text" name="input-productName" id="input-productName" required>
+                
+                <label for="input-description">Description: </label>
+                <input type="text" name="input-description" id="input-description" required>
+                
+                <label for="input-price">*Price: </label>
+                <input type="number" step="0.01" name="input-price" id="input-price" required>
+                
+                <label for="input-inventory">Inventory: </label>
+                <input type="number" name="input-inventory" id="input-inventory" required>
+                
+                <label id="requiredLabel">* = required field</label>
+            </fieldset>
+            <input class="btn" type="submit" id="addProduct" value="Add Product">
+            <input class="btn" type="button" value="Cancel" onClick="browseProducts()">
+        </form> 
+    </div><!-- insert -->
+
+     <!-- Update section to update product details -->
+    <div id="update">
+        <form method="POST" id="UpdateProduct">
+            <legend><strong>Update Product</strong></legend>
+                <fieldset class="fields">
+                <input type="hidden" name="productID" id="input-update-productID">
+                <label> *Product Name </label> <input type="text" name="productName" id="input-update-productName">
+                <label> Description </label> <input type="text" name="description" id="input-update-description">
+                <label> *Price </label> <input type="text" name="price" id="input-update-price">
+                <label> Inventory </label> <input type="text" name="inventory" id="input-update-inventory">
+                <label id="requiredLabel">* = required field</label>
+            </fieldset>
+            <input class="btn" type="submit" id="UpdateProducts" value="Update Products">
+            <input class="btn" type="button" value="Cancel" onClick="browseProducts()">
+        </form> 
+    </div><!-- update -->
+</body>
+
+<!-- Include external JavaScript files for handling product updates and deletions -->
+<script src="./js/delete_product.js"></script>
+<script src="./js/update_product.js"></script>

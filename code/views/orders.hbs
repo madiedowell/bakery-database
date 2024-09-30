@@ -1,0 +1,123 @@
+<!-- Orders -->
+<!-- Parts of this file were adapted from the example html provided in the project step 3 instructions -->
+
+<!-- Include jQuery library -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script language="JavaScript">
+        // Function to control the visibility of different forms (browse, insert, update)
+        function showform(dowhat) {
+            if (dowhat == 'insert'){
+                document.getElementById('browse').style.display = 'none';
+                document.getElementById('insert').style.display = 'block';
+                document.getElementById('update').style.display = 'none';
+            }
+            else if (dowhat == 'update'){
+                document.getElementById('browse').style.display = 'none';
+                document.getElementById('insert').style.display = 'none';
+                document.getElementById('update').style.display = 'block';
+            }
+            else if (dowhat == 'all'){
+                document.getElementById('browse').style.display = 'block';
+                document.getElementById('insert').style.display = 'block';
+                document.getElementById('update').style.display = 'block';
+            }
+            else { //by default display browse
+                document.getElementById('browse').style.display = 'block';
+                document.getElementById('insert').style.display = 'none';
+                document.getElementById('update').style.display = 'none';
+            }
+        }
+    // Function to show the insert form
+    function newOrder() { showform('insert'); }
+
+    // Function to show the update form and populate it with existing data
+    function updateOrder(orderID) 
+    { 
+        showform('update'); 
+
+        var row = document.getElementById('row_' + orderID);
+
+        // Update the form fields with the values from the table row
+        document.getElementById('input-update-orderID').value = row.cells[1].innerText.trim();
+    }
+    // Function to show the browse form
+    function browseOrders() { showform ('browse'); }
+
+    // Function to show all forms (mainly for debugging or admin purposes)
+    function showAll() { showform ('all'); }
+</script>
+
+<body onload="browseOrders()">
+    <h2>Orders</h2>
+    <h3>The orders entity records details about orders including the customer and date. </h3>
+
+    <!-- Browse orders section -->
+    <div id = "browse">
+        <table border="1" cellpadding="5">
+            <tr>
+                <th><a href="#" onClick="newOrder()">New</a></th>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Order Date</th>
+                <th>Total</th>
+            </tr>
+            {{#each data}}
+                <tr id="row_{{this.orderID}}">
+                    <td><a href="#" onClick="updateOrder({{this.orderID}})">Edit</a></td>
+                    <td align="right" >{{this.orderID}}</td>
+                    <td align="right" >{{this.firstName}}</td>
+                    <td align="right" >{{this.lastName}}</td>
+                    <td>{{this.orderDate}}</td>
+                    <td>{{this.total}}</td>
+                    <td><a href="#" onClick="deleteOrder({{this.orderID}})">Delete</a></td>
+                </tr>
+            {{/each}}
+        </table>
+    </div> <!-- browse -->
+
+    <!-- Insert order section -->
+    <div id="insert">
+        <form method="POST" id="addOrder" action="/add-order-form">
+            <legend><strong>Add Order</strong></legend>
+            <fieldset class="fields">
+                <select name="input-customerID" id="input-customerID">
+                    <option value="">*Select a customer: </option>
+                    <option value="0">NULL</option>
+                    {{#each customers}}
+                    <option value="{{this.customerID}}">{{this.firstName}} {{this.lastName}}</option>
+                    {{/each}}
+                </select>
+                <label> *Order Date </label> <input type="date" name="input-orderDate" id="input-orderDate">
+                <label id="requiredLabel">* = required field</label>
+            </fieldset>
+            <input class="btn" type="submit" id="addOrder" value="Add Order">
+            <input class="btn" type="button" value="Cancel" onClick="browseOrders()">
+        </form> 
+    </div><!-- insert -->
+
+    <!-- Update order section -->
+    <div id="update">
+        <form id="UpdateOrder">
+            <legend><strong>Update Order</strong></legend>
+            <fieldset class="fields">
+                <label> *Order ID </label><input type="text" name="input-update-orderID" id="input-update-orderID" readonly>
+                <select name="input-update-customerID" id="input-update-customerID">
+                    <option value="">*Select a customer: </option>
+                    <option value="0">NULL</option>
+                    {{#each customers}}
+                    <option value="{{this.customerID}}">{{this.firstName}} {{this.lastName}}</option>
+                    {{/each}}
+                </select>
+                <label> *Order Date </label> <input type="date" name="input-update-orderDate" id="input-update-orderDate">
+                <label id="requiredLabel">* = required field</label>
+            </fieldset>
+            <input class="btn" type="submit" id="UpdateSaveOrders" value="Save Update Orders">
+            <input class="btn" type="button" value="Cancel" onClick="browseOrders()">
+        </form> 
+    </div><!-- update -->
+</body>
+
+<!-- Include JavaScript files for delete and update order operations -->
+<script src="./js/delete_order.js"></script>
+<script src="./js/update_order.js"></script>

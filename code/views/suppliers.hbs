@@ -1,0 +1,135 @@
+<!-- Suppliers -->
+<!-- Parts of this file were adapted from the example html provided in the project step 3 instructions -->
+
+<!-- Include jQuery library -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script language="JavaScript">
+    // Function to control the visibility of different forms (browse, insert, update)
+    function showform(dowhat) {
+        if (dowhat == 'insert'){
+            document.getElementById('browse').style.display = 'none';
+            document.getElementById('insert').style.display = 'block';
+            document.getElementById('update').style.display = 'none';
+        }
+        else if (dowhat == 'update'){
+            document.getElementById('browse').style.display = 'none';
+            document.getElementById('insert').style.display = 'none';
+            document.getElementById('update').style.display = 'block';
+        }
+        else if (dowhat == 'delete'){
+            document.getElementById('browse').style.display = 'none';
+            document.getElementById('insert').style.display = 'none';
+            document.getElementById('update').style.display = 'none';
+        }
+        else if (dowhat == 'all'){
+            document.getElementById('browse').style.display = 'block';
+            document.getElementById('insert').style.display = 'block';
+            document.getElementById('update').style.display = 'block';
+        }
+        else { //by default display browse
+            document.getElementById('browse').style.display = 'block';
+            document.getElementById('insert').style.display = 'none';
+            document.getElementById('update').style.display = 'none';
+        }
+    }
+    // Function to show the insert form
+    function newSupplier() { showform('insert'); }
+
+    // Function to show the update form and populate it with existing data
+    function updateSupplier(supplierID) 
+    { 
+        showform('update'); 
+
+        var row = document.getElementById('row_' + supplierID);
+
+        // Update the form fields with the values from the table row
+        document.getElementById('input-update-supplierID').value = row.cells[1].innerText.trim();
+        document.getElementById('input-update-supplierName').value = row.cells[2].innerText.trim();
+        document.getElementById('input-update-email').value = row.cells[3].innerText.trim();
+        document.getElementById('input-update-phone').value = row.cells[4].innerText.trim();
+        document.getElementById('input-update-address').value = row.cells[5].innerText.trim();
+    }
+    // Function to show the browse form
+    function browseSuppliers() { showform ('browse'); }
+
+    // Function to show all forms (mainly for debugging or admin purposes)
+    function showAll() { showform ('all'); }
+
+</script>
+<body onload="browseSuppliers()">
+    <h2>Suppliers</h2>
+    <h3>The supplier's entity stores information about the bakery’s suppliers that provide the bakery with its products. This facilitates supplier relationship management. </h3>
+
+    <!-- Browse suppliers section -->
+    <div id = "browse">
+
+        <table border="1" cellpadding="5">
+            <tr>
+                <th><a href="#" onClick="newSupplier()">New</a></th>
+                <th>ID</th>
+                <th>Supplier Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+            </tr>
+
+
+            {{#each data}}
+                <tr id="row_{{this.supplierID}}">
+                    <td><a href="#" onClick="updateSupplier({{this.supplierID}})">Edit</a></td>
+                    <td align="right" >{{this.supplierID}}</td>
+                    <td>{{this.companyName}}</td>
+                    <td align="right" >{{this.email}}</td>
+                    <td>{{this.phone}}</td>
+                    <td>{{this.address}}</td>
+                    <td><a href="#" onClick="deleteSupplier({{this.supplierID}})">Delete</a></td>
+                </tr>
+            {{/each}}
+        </table>
+    </div> <!-- browse -->
+
+    <!-- Insert supplier section -->
+    <div id="insert">
+        <form method="POST" id="addSupplier" action="/add-supplier-form">
+            <legend><strong>Add Supplier</strong></legend>
+              <fieldset class="fields">
+                <label for="input-supplierName"> *Supplier Name </label>
+                <input type="text" name="input-supplierName" id="input-supplierName" required>
+
+                <label for="input-email"> *Email </label>
+                <input type="text" name="input-email" id="input-email" required>
+
+                <label for="input-phone"> *Phone </label> 
+                <input type="text" name="input-phone" id="input-phone" required>
+
+                <label for="input-address"> *Address </label>
+                <input type="text" name="input-address" id="input-address" required>
+
+                <label id="requiredLabel">* = required field</label>
+          </fieldset>
+            <input class="btn" type="submit" id="addSupplier" value="Add Supplier">
+            <input class="btn" type="button" value="Cancel" onClick="browseSuppliers()">
+        </form> 
+    </div><!-- insert -->
+
+    <!-- Update supplier section -->
+    <div id="update">
+        <form method="POST" id="UpdateSupplier">
+            <legend><strong>Update Supplier</strong></legend>
+              <fieldset class="fields">
+                <input type="hidden" name="supplierID" id="input-update-supplierID">
+                <label> *Supplier Name </label> <input type="text" name="supplierName" id="input-update-supplierName">
+                <label> *Email </label> <input type="text" name="email" id="input-update-email">
+                <label> *Phone </label> <input type="text" name="phone" id="input-update-phone">
+                <label> *Address </label> <input type="text" name="address" id="input-update-address">
+                <label id="requiredLabel">* = required field</label>
+          </fieldset>
+            <input class="btn" type="submit" id="UpdateSupplier" value="Update Supplier">
+            <input class="btn" type="button" value="Cancel" onClick="browseSuppliers()">
+        </form> 
+    </div><!-- update -->
+</body>
+
+<!-- Include JavaScript files for delete and update supplier operations -->
+<script src="./js/delete_supplier.js"></script>
+<script src="./js/update_supplier.js"></script>

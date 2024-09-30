@@ -1,0 +1,96 @@
+<!-- Product Suppliers -->
+<!-- Parts of this file were adapted from the example html provided in the project step 3 instructions -->
+
+<!-- Import jQuery library -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script language="JavaScript">
+
+    // Function to show or hide different sections of the page based on the action
+    function showform(dowhat) {
+        /*
+        * four DIVS: browse, insert
+        * this function sets one visible the others not
+        */
+        if (dowhat == 'insert'){
+            document.getElementById('browse').style.display = 'none';
+            document.getElementById('insert').style.display = 'block';
+        }
+        else if (dowhat == 'all'){
+            document.getElementById('browse').style.display = 'block';
+            document.getElementById('insert').style.display = 'block';
+        }
+        else { //by default display browse
+            document.getElementById('browse').style.display = 'block';
+            document.getElementById('insert').style.display = 'none';
+        }
+    }
+
+    // Function to show the insert form
+    function newProductSuppliers() { showform('insert'); }
+
+    // Function to show the browse section
+    function browseProductSuppliers() { showform ('browse'); }
+
+    // Function to show all sections (currently not in use)
+    function showAll() { showform ('all'); }
+
+</script>
+
+
+<body onload="browseProductSuppliers()">
+    <h2>ProductSuppliers</h2>
+    <h3>The product suppliers entity associates products with their respective suppliers. It serves as an intersection table between products and suppliers. </h3>
+
+    <!-- Browse section to display the product suppliers table -->
+    <div id = "browse">
+        <table border="1" cellpadding="5">
+            <tr>
+                <th><a href="#" onClick="newProductSuppliers()">New</a></th>
+                <th>ID</th>
+                <th>Product Name</th>
+                <th>Supplier Name</th>
+            </tr>
+            <!-- Loop through the data to populate the table -->
+            {{#each data}}
+                <tr>
+                    <td></td>
+                    <td>{{inc @index}}</td>
+                    <td>{{this.productName}}</td>
+                    <td>{{this.companyName}}</td> 
+                    <td><a href="#" onClick="deletePs({{this.productID}}, {{this.supplierID}})">Delete</a></td>
+                </tr>
+            {{/each}}
+        </table>
+    </div> <!-- browse -->
+
+    <!-- Insert section to add a new product supplier -->
+    <div id="insert">
+        <form method="POST" id="addProductSuppliers" action="/add-product-suppliers-form">
+            <legend><strong>Add Product Supplier</strong></legend>
+            <fieldset class="fields">
+                <label for="input-productName"> *Product Name </label>
+                <select name="input-productName" id="input-productName">
+                    <option value="">Select a Product: </option>
+                    <!-- Loop through the products to populate the dropdown -->
+                    {{#each products}}
+                        <option value="{{this.productID}}">{{this.productName}}</option>
+                    {{/each}}
+                </select>
+                <label for="input-supplierName"> *Supplier Name </label>
+                <select name="input-supplierName" id="input-supplierName">
+                    <option value="">Select a Supplier: </option>
+                    <!-- Loop through the suppliers to populate the dropdown -->
+                    {{#each suppliers}}
+                        <option value="{{this.supplierID}}">{{this.companyName}}</option>
+                    {{/each}}
+                </select>
+                <label id="requiredLabel">* = required field</label>
+            </fieldset>
+            <input class="btn" type="submit" id="addProductSupplier" value="Add Product Supplier">
+            <input class="btn" type="button" value="Cancel" onClick="browseProductSuppliers()">
+        </form> 
+    </div><!-- insert -->
+
+    <!-- Include external JavaScript file for handling product supplier deletions -->
+    <script src="./js/delete_ps.js"></script>
+</body>

@@ -1,0 +1,22 @@
+<!-- main.hbs-->
+<!-- Parts of this file were adapted from the example html provided in the project step 3 instructions -->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <!-- Title of the page, dynamically set using Handlebars -->
+        <title>{{title}}</title>
+        <!-- Link to the external CSS file for styling -->
+        <link href="./css/style.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <!-- Main header for the bakery's website -->
+        <h1>Benny's Bakery</h1>
+        <!-- Navigation links to different sections of the website -->
+        <h4>[ <a href="/">Home</a> | <a href="/customers">Customers</a> | <a href="/orders">Orders</a> | <a href="/products">Products</a> | <a href="/suppliers">Suppliers</a> | <a href="/orderproducts">OrderProductDetails</a> | <a href="/productsuppliers">ProductSuppliers</a>]</h4>
+        <!-- Placeholder for dynamic content injected by Handlebars -->
+        {{{body}}}
+    </body>
+</html>
+
