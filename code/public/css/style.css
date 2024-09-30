@@ -1,0 +1,23 @@
+body {
+    background-color: rgb(246, 193, 201);
+    color: black;
+    margin-left: 10px;
+}
+
+h4 {
+    border-bottom: 1px solid rgb(227, 19, 126); 
+    margin-bottom: 20px;
+}
+
+table {
+    background-color: rgb(223, 220, 220);
+}
+
+
+fieldset {
+    background-color: rgb(223, 220, 220);
+}
+
+#requiredLabel {
+    padding-left: 50px; 
+}
